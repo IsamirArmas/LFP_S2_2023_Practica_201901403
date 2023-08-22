@@ -19,11 +19,13 @@ class ListaEnlazadaProductos:
         nuevo_producto = NodoProducto(nombre, cantidad, precio, ubicacion)
         if not self.cabeza:
             self.cabeza = nuevo_producto
+            print("Se ingreso al inventario: ", cantidad," ", nombre, "en la ubicacion ", ubicacion )
             return
         actual = self.cabeza
         while actual.siguiente:
             actual = actual.siguiente
         actual.siguiente = nuevo_producto
+        print("Se ingreso al inventario: ", cantidad," ", nombre, "en la ubicacion ", ubicacion )
 #Funcion para ver como se estaba ingresando la lista 
     def mostrar(self):
         actual = self.cabeza
@@ -47,6 +49,7 @@ class ListaEnlazadaProductos:
         if producto:
             producto.cantidad += cantidad_a_agregar
             producto.ubicacion = ubicacion_nueva
+            print("Se agregaron ", cantidad_a_agregar, " ", nombre, " en la ", ubicacion_nueva, ".")
         else:
             print("Producto no encontrado.")
 
@@ -55,6 +58,7 @@ class ListaEnlazadaProductos:
         if producto:
             if producto.cantidad >= cantidad_a_vender and producto.ubicacion == verificar_ubi:
                 producto.cantidad = producto.cantidad -cantidad_a_vender
+                print("Se vendieron ", cantidad_a_vender, " ", nombre, " en la ", verificar_ubi, ".")
             else:
                 print("No hay suficiente stock para la venta.")
         else:
@@ -80,7 +84,6 @@ def leer_datos_desde_archivo(archivo, lista):
                 continue
 
             lista.agregar(nombre, cantidad, precio, ubicacion)
-
     except FileNotFoundError:
         print(f"El archivo '{archivo}' no fue encontrado")
     except Exception as e:
@@ -105,13 +108,14 @@ def Actualizar_datos(archivo, lista):
             if accion == "agregar_stock":
                 lista.agregar_stock(nombre, cantidad, ubicacion) 
             elif accion == "vender_producto":
-                lista.vender_producto(nombre, cantidad, ubicacion)  
+                lista.vender_producto(nombre, cantidad, ubicacion) 
             else:
-                print(f"Acción no reconocida en la línea {linea_num}")
+                print(f"Acción no reconocida en la línea {linea_num}") 
     except FileNotFoundError:
         print(f"El archivo '{archivo}' no fue encontrado")
     except Exception as e:
         print(f"Error durante la lectura del archivo: {e}")
+       
 
 def mostrar_menu():
     print("============ SISTEMA DE INVENTARIO ============")
@@ -142,11 +146,9 @@ while True:
     if opcion == "1":
         #Ingresar el nombre del archivo .inv
         leer_datos_desde_archivo("inventario.inv", lista_productos)
-        print("\nInventario con datos del archivo cargado Correctamente\n")
     elif opcion == "2":
         #Ingresar el nombre del archivo .mov
         Actualizar_datos("movimientos.mov", lista_productos)
-        print("\nMovimientos realizados exitosamente\n")
     elif opcion == "3":
         Generar_reporte()
         print("\nSe ha Generaro el reporte exitosamente\n")
